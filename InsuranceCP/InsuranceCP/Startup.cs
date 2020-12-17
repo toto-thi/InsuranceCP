@@ -7,6 +7,7 @@ using InsuranceCP.Data.Turbo_LevelRepo;
 using InsuranceCP.Data.VehicleRepo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -41,11 +42,14 @@ namespace InsuranceCP
             services.AddScoped<ILvelRepo, QLvelRepo>();
             services.AddScoped<ITurboRepo, QTurboRepo>();
             services.AddScoped<IVehicleRepo, QVehicleRepo>();
-            services.AddCors(options =>
+            services.AddCors(o => o.AddPolicy("MyCORSPolicy", builder =>
             {
-                options.AddPolicy("AllowAllOrigins",
-                    builder => builder.AllowAnyOrigin());
-            });
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+        
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "InsuranceCP", Version = "v1" });
@@ -67,6 +71,7 @@ namespace InsuranceCP
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseCors("MyCORSPolicy");
 
             app.UseEndpoints(endpoints =>
             {
