@@ -41,6 +41,11 @@ namespace InsuranceCP
             services.AddScoped<ILvelRepo, QLvelRepo>();
             services.AddScoped<ITurboRepo, QTurboRepo>();
             services.AddScoped<IVehicleRepo, QVehicleRepo>();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllOrigins",
+                    builder => builder.AllowAnyOrigin());
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "InsuranceCP", Version = "v1" });
