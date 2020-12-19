@@ -45,7 +45,7 @@ namespace InsuranceCP.Data.CompanyRepo
             await _context.Company.ReplaceOneAsync(x=>x.Id == Id, company);
             
         }
-
+        
 
     }
 }

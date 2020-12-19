@@ -12,6 +12,5 @@ namespace InsuranceCP.Data.CompanyRepo
         Task Insert(Company company);
         Task<DeleteResult> Delete(string Id);
         Task Update(string Id, Company company);
-        
     }
 }

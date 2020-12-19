@@ -47,3 +47,6 @@ C:\Users\IT-Laotelecom\OneDrive\Desktop\InsuranceCP\InsuranceCP\InsuranceCP\obj\
 C:\Users\IT-Laotelecom\OneDrive\Desktop\InsuranceCP\InsuranceCP\InsuranceCP\bin\Debug\net5.0\Newtonsoft.Json.dll
 C:\Users\IT-Laotelecom\OneDrive\Desktop\InsuranceCP\InsuranceCP\InsuranceCP\bin\Debug\net5.0\AutoMapper.dll
 C:\Users\IT-Laotelecom\OneDrive\Desktop\InsuranceCP\InsuranceCP\InsuranceCP\bin\Debug\net5.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\IT-Laotelecom\OneDrive\Desktop\InsuranceCP\InsuranceCP\InsuranceCP\bin\Debug\net5.0\Microsoft.DotNet.PlatformAbstractions.dll
+C:\Users\IT-Laotelecom\OneDrive\Desktop\InsuranceCP\InsuranceCP\InsuranceCP\bin\Debug\net5.0\Microsoft.Extensions.DependencyModel.dll
+C:\Users\IT-Laotelecom\OneDrive\Desktop\InsuranceCP\InsuranceCP\InsuranceCP\bin\Debug\net5.0\MongoDB.Driver.GridFS.dll

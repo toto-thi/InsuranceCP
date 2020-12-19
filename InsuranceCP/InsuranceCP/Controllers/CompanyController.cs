@@ -4,9 +4,12 @@ using InsuranceCP.Model;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver.GridFS;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace InsuranceCP.Controllers
@@ -16,12 +19,13 @@ namespace InsuranceCP.Controllers
     public class CompanyController : ControllerBase
     {
         public readonly IComRepo _Company;
-        public static IWebHostEnvironment _enviroment;
+        public IWebHostEnvironment _environment;
         public CompanyController(IComRepo company, IWebHostEnvironment environment)
         {
             _Company = company;
-            _enviroment = environment;
-           
+            _environment = environment;
+
+
         }
         [HttpGet]
         public Task<string> Get()
@@ -35,28 +39,13 @@ namespace InsuranceCP.Controllers
             return JsonConvert.SerializeObject(company);
         }
         [HttpPost]//Insert
-        public async Task<string> PostCom([FromBody]Company company)
+        public async Task<string> PostCom([FromForm]Company company)
         {
-            /*List<Company> comlist = JsonConvert.DeserializeObject<List<Company>>(ComImage.Company);*/
-            /*if (ifile.Length > 0)
-            {
-                if (!Directory.Exists(_enviroment.WebRootPath + "\\Image\\"))
-                {
-                    Directory.CreateDirectory(_enviroment.WebRootPath + "\\Image\\");
-                }
-                using (FileStream filestream = System.IO.File.Create(_enviroment.WebRootPath + "\\Image\\" + ifile.FileName))
-                {
-                    await ifile.CopyToAsync(filestream);
-                    company.Com_pic = ifile.FileName;
-                    await _Company.Insert(company);
-                    filestream.Flush();
-                    return "Uploaded";
-
-                }
-            }*/
-
+            company.Com_Pic_name = await SaveImage(company.Com_Pic);
             await _Company.Insert(company);
-            return "Succesful";
+            
+            return "ok";
+
         }
         [HttpDelete("{Id}")]//Delete
         public async Task<string> DeleteCom(string Id)
@@ -73,6 +62,37 @@ namespace InsuranceCP.Controllers
             await _Company.Update(Id, company);
             return "Updated";
         }
-      
+        [NonAction]
+        public async Task<string> SaveImage(IFormFile imagefile)
+        {
+            /*if (imagefile.Length > 0)
+             {
+                     if (!Directory.Exists(_environment.WebRootPath + "\\uploads\\"))
+                     {
+                         Directory.CreateDirectory(_environment.WebRootPath + "\\uploads\\");
+                     }
+                     using (FileStream filestream = System.IO.File.Create(_environment.WebRootPath + "\\uploads\\" + imagefile.FileName))
+                     {
+                         await imagefile.CopyToAsync(filestream);
+                         
+
+                          return  imagefile.FileName;
+                     }
+               
+
+            }
+             else
+             {
+                 return "Unsuccessful";
+             }*/
+            string imageName = new string(Path.GetFileNameWithoutExtension(imagefile.FileName).Take(10).ToArray()).Replace(' ','-');
+            imageName = imageName + DateTime.Now.ToString("yymmssff") + Path.GetExtension(imagefile.FileName);
+            var imagePath = Path.Combine(_environment.ContentRootPath, "Image", imageName);
+            using (var fileStream = new FileStream(imagePath, FileMode.Create))
+            {
+                await imagefile.CopyToAsync(fileStream);
+            }
+            return imageName;
+        }
     }
 }

@@ -58,9 +58,17 @@
                 "NU1605"
               ]
             },
+            "Microsoft.AspNetCore.Mvc.Cors": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
             "MongoDB.Driver": {
               "target": "Package",
-              "version": "[2.11.4, )"
+              "version": "[2.11.5, )"
+            },
+            "MongoDB.Driver.GridFS": {
+              "target": "Package",
+              "version": "[2.11.5, )"
             },
             "Newtonsoft.Json": {
               "target": "Package",
