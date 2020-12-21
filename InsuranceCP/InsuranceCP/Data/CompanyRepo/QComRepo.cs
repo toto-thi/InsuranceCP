@@ -1,11 +1,10 @@
 ﻿using InsuranceCP.Model;
 using Microsoft.AspNetCore.Hosting;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
+
 
 namespace InsuranceCP.Data.CompanyRepo
 {
@@ -23,9 +22,21 @@ namespace InsuranceCP.Data.CompanyRepo
            return await _context.Company.DeleteOneAsync(Builders<Company>.Filter.Eq("Id", Id));
         }
 
-        public async Task<IEnumerable<Company>> GetAll()
+        public async Task<IEnumerable<Company>> GetAll(string http, string host, string port)
         {
-            return await _context.Company.Find(x => true).ToListAsync();
+            var projection = Builders<Company>.Projection.Expression(c => new Company
+            {
+                Id = c.Id,
+                Com_Name = c.Com_Name,
+                Com_Address = c.Com_Address,
+                Com_Contracts = c.Com_Contracts,
+                Com_Pic_Name = c.Com_Pic_Name,
+                Com_Pic_Path=string.Format("{0}://{1}{2}/Image/{3}",http,host,port,c.Com_Pic_Name),
+                Com_Status = c.Com_Status
+            });
+
+            return await _context.Company.Find(x => true).Project(projection).ToListAsync();
+            
         }
 
         public async Task<Company> GetById(string Id)
@@ -45,7 +56,7 @@ namespace InsuranceCP.Data.CompanyRepo
             await _context.Company.ReplaceOneAsync(x=>x.Id == Id, company);
             
         }
-        
+
 
     }
 }

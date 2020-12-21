@@ -1,3 +1,4 @@
+using AutoMapper;
 using InsuranceCP.Data;
 using InsuranceCP.Data.CategoryRepo;
 using InsuranceCP.Data.CompanyRepo;
@@ -10,9 +11,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using System;
+using System.IO;
 
 namespace InsuranceCP
 {
@@ -35,7 +39,7 @@ namespace InsuranceCP
             services.Configure<Settings>(Configuration.GetSection(nameof(Settings)));
             services.AddSingleton<Settings>(sp =>
                             sp.GetRequiredService<IOptions<Settings>>().Value);
-            //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IComRepo,QComRepo>();
             services.AddScoped<ICateRepo, QCateRepo>();
             services.AddScoped<ILvelSubRepo, QLvelSubRepo>();
@@ -69,6 +73,12 @@ namespace InsuranceCP
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseStaticFiles(new StaticFileOptions 
+            { 
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Image")),
+                RequestPath = "/Image"
+            
+            });
 
             app.UseAuthorization();
             app.UseCors("MyCORSPolicy");

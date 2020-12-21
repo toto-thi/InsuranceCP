@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using InsuranceCP.Data.CompanyRepo;
+using InsuranceCP.Dto;
 using InsuranceCP.Model;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver.GridFS;
+using MongoDB.Driver;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -20,10 +21,12 @@ namespace InsuranceCP.Controllers
     {
         public readonly IComRepo _Company;
         public IWebHostEnvironment _environment;
-        public CompanyController(IComRepo company, IWebHostEnvironment environment)
+        public IMapper _mapper;
+        public CompanyController(IComRepo company, IWebHostEnvironment environment, IMapper mapper)
         {
             _Company = company;
             _environment = environment;
+            _mapper = mapper;
 
 
         }
@@ -35,13 +38,19 @@ namespace InsuranceCP.Controllers
         [HttpGet]//Fetch
         private async Task<string> GetCom()
         {
-            var company = await _Company.GetAll();
+            string http = Request.Scheme;
+            string host = string.Format("{0}",Request.Host);
+            string port = Request.PathBase;
+          
+            var company = await _Company.GetAll(http, host, port);
+
+            //return _mapper.Map<IEnumerable<CompanyReadDto>>(company);
             return JsonConvert.SerializeObject(company);
         }
         [HttpPost]//Insert
         public async Task<string> PostCom([FromForm]Company company)
         {
-            company.Com_Pic_name = await SaveImage(company.Com_Pic);
+            company.Com_Pic_Name = await SaveImage(company.Com_Pic);
             await _Company.Insert(company);
             
             return "ok";

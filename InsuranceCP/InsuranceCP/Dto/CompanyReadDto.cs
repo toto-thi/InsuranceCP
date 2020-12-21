@@ -1,21 +1,18 @@
-﻿using Microsoft.AspNetCore.Http;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace InsuranceCP.Model
+namespace InsuranceCP.Dto
 {
-    public class Company
+    public class CompanyReadDto
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
         public string Com_Name { get; set; }
         public string Com_Address { get; set; }
         public string Com_Contracts { get; set; }
-        [BsonIgnore]
-        public IFormFile Com_Pic { get; set; }
         public string Com_Pic_Name { get; set; }
-        [BsonIgnore]
         public string Com_Pic_Path { get; set; }
         public string Com_Status { get; set; }
     }
